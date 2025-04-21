@@ -188,6 +188,88 @@ def delete_employee(employee_id):
     conn.close()
     print("🗑️ Employee deleted.")
 
-if __name__ == "__main__":
-    read_employees()
 
+# --- ATTENDANCE CRUD OPERATIONS ---
+
+def add_attendance(attendance_id, employee_id, training_id, status, date):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO Attendance (Attendance_ID, Employee_ID, Training_ID, Completion_Status, Completion_Date)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (attendance_id, employee_id, training_id, status, date))
+    conn.commit()
+    conn.close()
+    print("✅ New attendance added.")
+
+def read_attendance():
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Attendance")
+    rows = cursor.fetchall()
+    conn.close()
+    for row in rows:
+        print(row)
+
+def update_attendance(attendance_id, new_status, new_date):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE Attendance
+        SET Completion_Status = ?, Completion_Date = ?
+        WHERE Attendance_ID = ?
+    ''', (new_status, new_date, attendance_id))
+    conn.commit()
+    conn.close()
+    print("✅ Attendance record updated.")
+
+def delete_attendance(attendance_id):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM Attendance WHERE Attendance_ID = ?", (attendance_id,))
+    conn.commit()
+    conn.close()
+    print("🗑️ Attendance record deleted.")
+
+
+# --- TRAINING CRUD OPERATIONS ---
+
+def add_training(training_id, title, date, start_time, end_time, duration):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO Training (Training_ID, Title, Scheduled_Date, Start_Time, End_Time, Duration)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (training_id, title, date, start_time, end_time, duration))
+    conn.commit()
+    conn.close()
+    print("✅ New training added.")
+
+def read_trainings():
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Training")
+    rows = cursor.fetchall()
+    conn.close()
+    for row in rows:
+        print(row)
+
+def update_training(training_id, new_title, new_duration):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE Training
+        SET Title = ?, Duration = ?
+        WHERE Training_ID = ?
+    ''', (new_title, new_duration, training_id))
+    conn.commit()
+    conn.close()
+    print("✅ Training updated.")
+
+def delete_training(training_id):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM Training WHERE Training_ID = ?", (training_id,))
+    conn.commit()
+    conn.close()
+    print("🗑️ Training deleted.")
