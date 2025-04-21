@@ -145,3 +145,49 @@ def create_and_populate_database():
 # Run the function
 if __name__ == '__main__':
     create_and_populate_database()
+
+# --- EMPLOYEE CRUD OPERATIONS ---
+
+def add_employee(employee_id, first_name, last_name, email, department):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO Employee (Employee_ID, FirstName, LastName, Email, Department)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (employee_id, first_name, last_name, email, department))
+    conn.commit()
+    conn.close()
+    print("✅ New employee added.")
+
+def read_employees():
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Employee")
+    rows = cursor.fetchall()
+    conn.close()
+    for row in rows:
+        print(row)
+
+def update_employee(employee_id, new_email, new_department):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE Employee
+        SET Email = ?, Department = ?
+        WHERE Employee_ID = ?
+    ''', (new_email, new_department, employee_id))
+    conn.commit()
+    conn.close()
+    print("✅ Employee updated.")
+
+def delete_employee(employee_id):
+    conn = sqlite3.connect('EmployeeTraining.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM Employee WHERE Employee_ID = ?", (employee_id,))
+    conn.commit()
+    conn.close()
+    print("🗑️ Employee deleted.")
+
+if __name__ == "__main__":
+    read_employees()
+
